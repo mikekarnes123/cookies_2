@@ -4,8 +4,8 @@ class User < ApplicationRecord
   validates_presence_of :email
 
   def db_check
-    return false if User.where(user_name: user_name).count != 0
-    return false if User.where(user_name: email).count != 0
+    return false if User.find_by(user_name: user_name) != nil
+    return false if User.find_by(user_name: email) != nil 
     return false if user_name == nil
     return false if email == nil
     return false if password == nil
@@ -14,11 +14,10 @@ class User < ApplicationRecord
 
 
   def self.authenticate(user_name, password)
-    if User.where(user_name: user_name, password: password)
-      x = User.where(user_name: user_name)
-      binding.pry
+    if User.find_by(user_name: user_name, password: password)
+      User.find_by(user_name: user_name).id
     else
-      redirect_to login_path
+      false
     end
   end
 end

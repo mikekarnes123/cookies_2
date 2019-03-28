@@ -1,21 +1,31 @@
 class UsersController < ApplicationController
   def new
-    binding.pry
-    @user = User.authenticate
+    @user = User.new
   end
 
   def index
-
+    @users = User.all
   end
 
 
 
   def create
-    user = User.new(user_params)
-    if user.db_check
-      user.save
+    if params[:user]
+      user = User.new(user_params)
+      if user.db_check
+        user.save
+        session[:current_user_id] = user.id
+        render :index
+      else
+        redirect_to new_user_path
+      end
     else
-      redirect_to new_user_path
+      result = User.authenticate(params[:user_name], params[:password])
+      if result == false
+        redirect_to new_user_path
+      else
+        session[:current_user_id] = result
+      end
     end
   end
 

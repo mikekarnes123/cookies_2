@@ -20,15 +20,15 @@ RSpec.describe 'user creation workflow' do
   it 'should test login' do
     bob = User.create(user_name: 'bob123', email: 'bob@email.com', password: 'qwerty')
     visit login_path
-    fill_in 'user[user_name]', with: 'bob123'
-    fill_in 'user[password]', with: 'qwerty'
-    click_on 'Create User'
-    expect(current_path).to eq(new_user_path)
-    visit login_path
-    fill_in 'user[user_name]', with: 'joeshmo'
-    fill_in 'user[password]', with: 'dvewz'
-    click_on 'Create User'
+    fill_in 'user_name', with: 'bob123'
+    fill_in 'password', with: 'qwerty'
+    click_button 'Submit'
     expect(current_path).to eq(users_path)
+    visit login_path
+    fill_in 'user_name', with: 'joeshmo'
+    fill_in 'password', with: 'dvewz'
+    click_button 'Submit'
+    expect(current_path).to eq(new_user_path)
 
 
 
